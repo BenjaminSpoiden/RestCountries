@@ -113,9 +113,26 @@ function CountryDetail({ data }) {
     )
 }
 
-export async function getServerSideProps(context) {
+export async function getStaticPaths() {
+
+    const response = await countryAxios.get(`/all`)
+    const data = response.data
+
+    const paths = data.map((country) => ({
+        params: {
+            id: country.name
+        }
+    }))
+
+    return {
+        paths,
+        fallback: true
+    }
+}
+
+export async function getStaticProps({ params }) {
    
-    const { id } = context.query
+    const { id } = params
     const response = await countryAxios.get(`/name/${id}`)
     const data = response.data
 

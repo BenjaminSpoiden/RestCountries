@@ -9,7 +9,7 @@ import { countryAxios } from '../utils/axiosConfig'
 function Home({ data }) {
 
   const [countries, setCountries] = useState([])
-
+  
   useEffect(() => {
     setCountries(data)
   }, [])
@@ -76,7 +76,7 @@ function Home({ data }) {
   )
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const response = await countryAxios.get('/all')
   const data = response.data
 
