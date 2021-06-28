@@ -6,9 +6,17 @@ import { countryAxios } from "../utils/axiosConfig"
 import { useRouter } from "next/router"
 
 function CountryDetail({ data }) {
-    
-    const country = data[0]
+
     const router = useRouter()
+    if(router.isFallback) {
+        return (
+            <div>
+                <p>Loading...</p>
+            </div>
+        )
+    }
+
+    const country = data[0]
     let _newBorders = []
     const [newBorders, setNewBorders] = useState([])
    
