@@ -118,11 +118,14 @@ export async function getStaticPaths() {
     const response = await countryAxios.get(`/all`)
     const data = response.data
 
-    const paths = data.map((country) => ({
-        params: {
-            id: country.name
-        }
-    }))
+    const paths = data.map((country) => {
+        const id = country.name.normalize('NFC')
+        return ({
+            params: {
+                id
+            }
+        })
+    })
 
     return {
         paths,
@@ -133,7 +136,7 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
    
     const { id } = params
-    const response = await countryAxios.get(`/name/${id}`)
+    const response = await countryAxios.get(`/name/${encodeURIComponent(id)}`)
     const data = response.data
 
     
