@@ -1,12 +1,43 @@
 module.exports = {
   mode: 'jit',
   purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'class', // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      padding: {
+        '1/3': '33.3333%',
+        '2/3': '66.6667%'
+      },
+      maxWidth: {
+       '1/4': '25%',
+       '1/2': '50%',
+       '3/4': '75%',
+       '8xl': '90rem'
+      },
+      maxHeight: {
+        '100': '30rem'
+      },
+      fontFamily: {
+        'poppins': ['Poppins', 'sans-serif'],
+        'nunito': ['Nunito', 'sans-serif']
+      },
+      colors: {
+        'darkGray': '#243142'
+      },
+      zIndex: {
+        '100': 100
+      } 
+    },
   },
   variants: {
-    extend: {},
+    extend: {
+      animation: ['motion-safe'],
+      maxHeight: ['focus'],
+    },
+    
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/aspect-ratio'),
+    require('tailwind-scrollbar')
+  ],
 }

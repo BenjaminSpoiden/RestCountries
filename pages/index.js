@@ -1,82 +1,96 @@
 import Head from 'next/head'
+import { useEffect, useState } from 'react'
+import { Countries } from '../components/Countries'
+import { DropdownMenu } from '../components/DropdownMenu'
+import { Navbar } from "../components/Navbar"
+import { SearchInput } from '../components/SearchInput'
+import { countryAxios } from '../utils/axiosConfig'
 
-export default function Home() {
+function Home({ data }) {
+
+  const [countries, setCountries] = useState([])
+
+  useEffect(() => {
+    setCountries(data)
+  }, [])
+
+  const filterByRegion = async (region) => {
+    if(region === '') return
+    if(region === 'all') {
+      setCountries(data)
+      return
+    }
+    const response = await countryAxios.get(`/region/${region}`)
+    const _data = response.data
+    setCountries(_data)
+  }
+
+  const searchCountry = (search) => {
+    if(search.length < 3) return
+    if(search === '') {
+      setCountries(data)
+      return
+    }
+
+    countryAxios.get(`/name/${search}`)
+      .then(response => {
+        const _data = response.data
+        setCountries(_data)
+      })
+      .catch(e => console.log(e))
+    
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
+    <>
       <Head>
-        <title>Create Next App</title>
+        <title>Countries</title>
         <link rel="icon" href="/favicon.ico" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;400;700&family=Poppins&display=swap" rel="stylesheet" />
       </Head>
-
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
-
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="p-3 font-mono text-lg bg-gray-100 rounded-md">
-            pages/index.js
-          </code>
-        </p>
-
-        <div className="flex flex-wrap items-center justify-around max-w-4xl mt-6 sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="p-6 mt-6 text-left border w-96 rounded-xl hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className="flex items-center justify-center w-full h-24 border-t">
-        <a
-          className="flex items-center justify-center"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
-        </a>
-      </footer>
-    </div>
+      <body className="scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-100 bg-gray-100 dark:bg-gray-800 min-h-full max-w-full" >
+        
+        <Navbar isLarge /> 
+        
+        <main className="flex flex-col min-h-full mt-24 max-w-8xl justify-center md:mx-auto ">
+          <div className="flex mx-4 justify-center">
+            <div className="flex flex-col md:flex-row max-w-8xl w-screen items-center justify-between py-8 ">
+              <div>
+                <SearchInput searchCountry={searchCountry} />
+              </div>
+              <div>
+                <DropdownMenu filterByRegion={filterByRegion} />
+              </div>
+            </div>
+          </div>
+          <div className="flex max-w-full justify-center">
+            <div className="flex mx-4 justify-center max-w-8xl">
+              <Countries countries={countries} />
+            </div>
+          </div>
+        </main>
+      </body>
+    </>
   )
 }
+
+export async function getServerSideProps() {
+  const response = await countryAxios.get('/all')
+  const data = response.data
+
+  if(!data) {
+    return {
+      notFound: true
+    }
+  }
+
+  return {
+    props: {
+      data
+    }
+  }
+}
+
+export default Home
