@@ -10,29 +10,12 @@ function CountryDetail({ data }) {
     const router = useRouter()
     if(router.isFallback) {
         return (
-            <div>
-                <p>Loading...</p>
-            </div>
+            <div></div>
         )
     }
 
     const country = data[0]
-    let _newBorders = []
-    const [newBorders, setNewBorders] = useState([])
-   
-    useEffect(() => {
-        country.borders.forEach(async(border) => {
-            const response = await countryAxios.get(`/alpha/${border}`)
-            const { name } = response.data
-            let newName = name.replace(/ *\([^)]*\) */g, "")
-            _newBorders.push(newName)
-            setTimeout(() => {
-                _newBorders.sort()
-                setNewBorders(_newBorders)
-            }, 100);
-            
-        })
-    }, [newBorders])
+
     
     return (
         <>
@@ -102,7 +85,7 @@ function CountryDetail({ data }) {
                                         <div className="mt-8">
                                             <div className="flex flex-wrap dark:text-gray-300 flex-col md:flex-col md:items-center ">
                                                 <h4 className="font-bold" >Borders Countries:</h4>
-                                                <div className="flex flex-row flex-wrap" >{newBorders.map((border, index) => {
+                                                <div className="flex flex-row flex-wrap" >{country.borders.map((border, index) => {
                                                         return <div className={`mr-2 mt-2 `} >
                                                             <BorderCountry key={border} country={border}/> 
                                                         </div>
@@ -137,7 +120,7 @@ export async function getStaticPaths() {
 
     return {
         paths,
-        fallback: false
+        fallback: true
     }
 }
 
@@ -158,7 +141,8 @@ export async function getStaticProps({ params }) {
     return {
         props: {
             data
-        }
+        },
+        revalidate: 1
     }
 }
 

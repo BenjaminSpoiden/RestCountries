@@ -26,8 +26,8 @@ function Home({ data }) {
   }
 
   const searchCountry = (search) => {
-    if(search.length < 3) return
-    if(search === '') {
+    // if(search.length < 3) return
+    if(search.length === 0) {
       setCountries(data)
       return
     }
@@ -58,7 +58,9 @@ function Home({ data }) {
           <div className="flex mx-4 justify-center">
             <div className="flex flex-col md:flex-row max-w-8xl w-screen items-center justify-between py-8 ">
               <div>
-                <SearchInput searchCountry={searchCountry} />
+                <SearchInput 
+                  searchCountry={searchCountry} 
+                  />
               </div>
               <div>
                 <DropdownMenu filterByRegion={filterByRegion} />
