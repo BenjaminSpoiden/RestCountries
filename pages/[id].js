@@ -4,6 +4,7 @@ import { BorderCountry } from "../components/BorderCountry"
 import { Navbar } from "../components/Navbar"
 import { countryAxios } from "../utils/axiosConfig"
 import { useRouter } from "next/router"
+import { Footer } from "../components/Footer"
 
 function CountryDetail({ data }) {
 
@@ -22,30 +23,30 @@ function CountryDetail({ data }) {
             <Head>
                 <title>{country.name}</title>
             </Head>
-            <body className="scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-100 bg-gray-100 dark:bg-gray-800 max-w-full"  >
+            <body className="scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-100 bg-gray-100 dark:bg-gray-800 max-w-full min-h-full "  >
                 <Navbar isLarge />
                
-                <main className="flex flex-col max-w-8xl min-h-screen md:mx-auto">
-                    <div className="flex mx-4 flex-col min-h-full ">
+                <main className="flex flex-col md:min-h-screen min-h-screen-xl h-full max-w-8xl md:mx-auto">
+                    <div className="flex mx-4 min-h-screen flex-col">
                         <button 
                             className="flex justify-center shadow-lg mt-28 w-32 px-4 py-2 rounded bg-white dark:bg-darkGray" 
-                            onClick={() => router.replace('/')}
+                            onClick={() => router.back()}
                             >
                                 <h5 className="dark:text-gray-300 font-nunito font-bold ">&#8592; Go Back</h5>
                         </button>
                         <div className="flex flex-col md:grid md:grid-cols-2 md:mt-20 justify-start items-start max-w-8xl mx-auto w-full">
                             
-                            <div className="flex md:justify-center my-auto max-w-xl mt-10 h-full">
+                            <div className="flex md:justify-center my-auto max-w-xl mt-10">
                                 <div>
                                     <img src={country.flag} className=" object-cover shadow-xl" />
                                 </div>
                             </div>
-                            <div className="flex justify-center max-w-full w-full max-h-full">
-                                <div className="flex w-full  mt-10 ">
-                                    <div className="flex flex-col w-full max-h-72 h-full md:ml-4" >
+                            <div className="flex justify-center max-w-full w-full">
+                                <div className="flex w-full mt-10 ">
+                                    <div className="flex flex-col w-full max-h-72 md:ml-4" >
                                         <h4 className=" flex text-4xl dark:text-gray-300 text-gray-800 font-nunito font-bold" >{country.name}</h4>
                                         <div className="grid grid-cols-1 md:grid-cols-2 justify-center " >
-                                            <div className="flex flex-col  dark:text-gray-300 h-full mt-8">
+                                            <div className="flex flex-col  dark:text-gray-300 mt-8">
                                                 <h4 className="font-bold pb-2">
                                                     Native Name: <span className="font-normal" >{country.nativeName}</span> 
                                                 </h4>
@@ -82,7 +83,7 @@ function CountryDetail({ data }) {
                                                 </h4>
                                             </div>
                                         </div>
-                                        <div className="mt-8">
+                                        <div className=" flex mt-8">
                                             <div className="flex flex-wrap dark:text-gray-300 flex-col md:flex-col md:items-center ">
                                                 <h4 className="font-bold" >Borders Countries:</h4>
                                                 <div className="flex flex-row flex-wrap" >{country.borders.map((border, index) => {
@@ -99,6 +100,7 @@ function CountryDetail({ data }) {
                         </div>
                     </div>
                 </main>
+                <Footer />
             </body>
         </>
     )

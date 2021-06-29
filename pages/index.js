@@ -5,6 +5,8 @@ import { DropdownMenu } from '../components/DropdownMenu'
 import { Navbar } from "../components/Navbar"
 import { SearchInput } from '../components/SearchInput'
 import { countryAxios } from '../utils/axiosConfig'
+import { Footer } from "../components/Footer"
+
 
 function Home({ data }) {
 
@@ -73,6 +75,7 @@ function Home({ data }) {
             </div>
           </div>
         </main>
+        <Footer />
       </body>
     </>
   )

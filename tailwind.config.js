@@ -17,6 +17,9 @@ module.exports = {
       maxHeight: {
         '100': '30rem'
       },
+      minHeight:{
+        'screen-xl': '200vh'
+      },
       fontFamily: {
         'poppins': ['Poppins', 'sans-serif'],
         'nunito': ['Nunito', 'sans-serif']
